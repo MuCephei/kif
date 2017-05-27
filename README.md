@@ -1,2 +1,2 @@
 # kif
- * sigh *
+\* sigh *
