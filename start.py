@@ -21,7 +21,7 @@ if slack_client.rtm_connect():
                     text=message_text,
                     as_user=True)
             if 'text' in message and 'kif die' in message['text']:
-                message_text = 'ok'
+                message_text = '_sigh_'
 
                 slack_client.api_call(
                     "chat.postMessage",
