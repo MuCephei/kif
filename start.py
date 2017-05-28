@@ -30,7 +30,7 @@ if slack_client.rtm_connect():
                     text=message_text,
                     as_user=True)
 
-                subprocess.call("restart_kif.sh")
+                subprocess.call("~/restart_kif.sh")
 
                 stay_alive = False
 
