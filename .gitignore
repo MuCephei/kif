@@ -1,1 +1,7 @@
 APIToken
+*.pyc
+.idea/vcs.xml
+.idea/kif.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
