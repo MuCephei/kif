@@ -3,7 +3,7 @@ from slackclient import SlackClient
 
 def get_API_token():
     with open('APIToken', 'r') as f:
-        return f.readline()
+        return f.readline().strip()
 
 slack_client = SlackClient(get_API_token())
 
@@ -32,3 +32,6 @@ if slack_client.rtm_connect():
                 stay_alive = False
 
         time.sleep(1)
+
+print("goodnight")
+
