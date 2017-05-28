@@ -1,4 +1,5 @@
 import time
+import subprocess
 from slackclient import SlackClient
 
 def get_API_token():
@@ -20,14 +21,16 @@ if slack_client.rtm_connect():
                     channel=message['channel'],
                     text=message_text,
                     as_user=True)
-            if 'text' in message and 'kif die' in message['text']:
-                message_text = '_sigh_'
+            if 'text' in message and 'kif restart' in message['text']:
+                message_text = 'restarting'
 
                 slack_client.api_call(
                     "chat.postMessage",
                     channel=message['channel'],
                     text=message_text,
                     as_user=True)
+
+                subprocess.call("restart_kif.sh")
 
                 stay_alive = False
 
