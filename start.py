@@ -13,7 +13,7 @@ if slack_client.rtm_connect():
     slack_client.api_call(
         "chat.postMessage",
         channel='#zac-testing',
-        text="I'm alive'",
+        text="I'm alive",
         as_user=True)
 
     stay_alive = True
