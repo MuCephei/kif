@@ -9,6 +9,13 @@ def get_API_token():
 slack_client = SlackClient(get_API_token())
 
 if slack_client.rtm_connect():
+
+    slack_client.api_call(
+        "chat.postMessage",
+        channel='#zac-testing',
+        text="I'm alive'",
+        as_user=True)
+
     stay_alive = True
     while stay_alive:
         for message in slack_client.rtm_read():
@@ -21,6 +28,7 @@ if slack_client.rtm_connect():
                     channel=message['channel'],
                     text=message_text,
                     as_user=True)
+
             if 'text' in message and 'kif restart' in message['text']:
                 message_text = 'restarting'
 
@@ -34,7 +42,5 @@ if slack_client.rtm_connect():
 
                 stay_alive = False
 
-        time.sleep(1)
-
-print("goodnight")
+        time.sleep(0.1)
 
