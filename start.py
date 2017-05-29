@@ -48,7 +48,7 @@ if slack_client.rtm_connect():
                     text=message_text,
                     as_user=True)
 
-                write_revive_msg(message['user'] + " killed me")
+                write_revive_msg(msg = str(message['user'] + " killed me"))
 
                 subprocess.call("/home/kif-bot/restart_kif.sh")
 
