@@ -1,42 +1,26 @@
 import time
 import subprocess
-from slackclient import SlackClient
+import SlackClientWrapper
 
-def get_API_token():
-    with open('APIToken', 'r') as f:
-        return f.readline().strip()
+slack_client = SlackClientWrapper()
 
-slack_client = SlackClient(get_API_token())
+if slack_client.connect():
 
-if slack_client.rtm_connect():
-
-    slack_client.api_call(
-        "chat.postMessage",
-        channel='#zac-testing',
-        text="I'm alive",
-        as_user=True)
+    slack_client.send_message("I'm alive", "#zac-testing")
 
     stay_alive = True
     while stay_alive:
-        for message in slack_client.rtm_read():
+        for message in slack_client.get_messages():
             if 'text' in message and 'kif' in message['text']:
 
                 message_text = '* sigh *'
 
-                slack_client.api_call(
-                    "chat.postMessage",
-                    channel=message['channel'],
-                    text=message_text,
-                    as_user=True)
+                slack_client.send_message(message_test, message['channel'])
 
             if 'text' in message and 'kif restart' in message['text']:
                 message_text = 'restarting'
 
-                slack_client.api_call(
-                    "chat.postMessage",
-                    channel=message['channel'],
-                    text=message_text,
-                    as_user=True)
+                slack_client.send_message(message_text, message['channel'])
 
                 subprocess.call("~/restart_kif.sh")
 
