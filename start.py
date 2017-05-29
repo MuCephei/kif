@@ -6,6 +6,14 @@ def get_API_token():
     with open('APIToken', 'r') as f:
         return f.readline().strip()
 
+def write_revive_msg(msg="I'm alive"):
+    with open('revive', 'w') as f:
+        f.write(msg)
+
+def get_revive_msg():
+    with open('revive', 'r') as f:
+        f.readline().strip()
+
 slack_client = SlackClient(get_API_token())
 
 if slack_client.rtm_connect():
@@ -13,8 +21,10 @@ if slack_client.rtm_connect():
     slack_client.api_call(
         "chat.postMessage",
         channel='#zac-testing',
-        text="I'm alive",
+        text=get_revive_msg(),
         as_user=True)
+
+    write_revive_msg()
 
     stay_alive = True
     while stay_alive:
@@ -37,6 +47,8 @@ if slack_client.rtm_connect():
                     channel=message['channel'],
                     text=message_text,
                     as_user=True)
+
+                write_revive_msg(message['user'] + " killed me")
 
                 subprocess.call("/home/kif-bot/restart_kif.sh")
 
