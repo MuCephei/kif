@@ -12,7 +12,7 @@ def write_revive_msg(msg="I'm alive"):
 
 def get_revive_msg():
     with open('revive', 'r') as f:
-        f.readline().strip()
+        return f.readline().strip()
 
 slack_client = SlackClient(get_API_token())
 
