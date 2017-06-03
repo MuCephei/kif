@@ -29,9 +29,6 @@ if slack_client.rtm_connect():
 
     write_revive_msg()
 
-    channel_manager.update_channels(slack_client)
-    user_manager.update_names(slack_client)
-
     stay_alive = True
     while stay_alive:
         for message in slack_client.rtm_read():
@@ -44,6 +41,7 @@ if slack_client.rtm_connect():
             if 'text' in message and 'kif restart' in message['text']:
                 message_text = 'restarting'
 
+                channel_manager.update_channels(slack_client)
                 write_msg(slack_client, message_text, message['channel'])
 
                 name = user_manager.get_user_by_id(message['user'])
