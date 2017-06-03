@@ -23,9 +23,7 @@ if slack_client.rtm_connect():
 
     revive_msg = get_revive_msg()
     killers_name = revive_msg.split()[0]
-    print(killers_name)
     dm_channel = channel_manager.get_channel_by_user(killers_name, slack_client)
-    print(dm_channel)
 
     write_msg(slack_client, get_revive_msg(), dm_channel)
 
