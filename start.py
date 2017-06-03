@@ -35,6 +35,7 @@ if slack_client.rtm_connect():
             if 'text' in message and 'kif' in message['text']:
 
                 message_text = '* sigh *'
+                print(message_text)
 
                 write_msg(slack_client, message_text, message['channel'])
 
