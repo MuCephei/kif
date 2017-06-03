@@ -1,9 +1,9 @@
 import os.path
 import json
 
-def _write_if_nothing(file_path):
+def _write_if_nothing(file_path, msg=''):
     if not os.path.isfile(file_path):
-        write_to_file(file_path, '')
+        write_to_file(file_path, msg)
 
 def write_to_file(file_path, contents):
     with open(file_path, 'w') as f:
@@ -24,7 +24,7 @@ def write_to_json(file_path, contents):
         json.dump(contents, f)
 
 def read_from_json(file_path):
-    _write_if_nothing(file_path)
+    _write_if_nothing(file_path, '{}')
 
     with open(file_path) as f:
         return json.load(f)
