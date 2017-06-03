@@ -28,7 +28,6 @@ def update_channels(slack_client):
         for im in ims['ims']:
             channel_names[im['id']] = im['user']
             channel_ids[im['user']] = im['id']
-            print(im['user'])
 
     io.write_to_json(_channel_names, channel_names)
     io.write_to_json(_channel_ids, channel_ids)
