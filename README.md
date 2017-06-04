@@ -13,5 +13,11 @@ Seeing as this bot is mostly for fun we are going to have some restrictions.
  - Not only does this help with testing, but it makes it easier to port kif to other slacks
 4. Use handlers for processing events
  - These are going to eventually have an interface and will be possible to enable/disable from slack
+5. kif should be completely portable
+ - This means that it should run on any OS
+ - It can be assumed that files were gotten from git
+ - Installations should be done through pip
+    - but can be assumed to be done by the user
+ - Mainly this means to make directories and files before you use them
 5. For completely arbitrary reasons kif is not capitalized.
  - sigh

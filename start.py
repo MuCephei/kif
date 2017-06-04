@@ -4,6 +4,7 @@ from slackclient import SlackClient
 from managers import channel_manager, user_manager
 from util.api_calls import write_msg
 from util.file_IO import read_file, write_to_file
+from handlers import sigh_handler
 
 revive = 'revive'
 api_token = 'APIToken'
@@ -30,14 +31,15 @@ if slack_client.rtm_connect():
     write_revive_msg()
 
     stay_alive = True
+
+    handlers = [sigh_handler.Sigh()]
+
     while stay_alive:
         for message in slack_client.rtm_read():
-            if 'text' in message and 'kif' in message['text']:
 
-                message_text = '* sigh *'
-                print(message_text)
-
-                write_msg(slack_client, message_text, message['channel'])
+            for h in handlers:
+                if h.should_trigger(message):
+                    h.trigger(slack_client, message)
 
             if 'text' in message and 'kif restart' in message['text']:
                 message_text = 'restarting'

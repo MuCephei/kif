@@ -2,10 +2,10 @@ import util.file_IO as io
 from util.api_calls import get_channels, get_groups, get_ims
 import user_manager
 
-_channel_manager_folder = 'channel_manager/'
-_channel_names = _channel_manager_folder + 'ChannelNames.json'
-_channel_ids = _channel_manager_folder + 'ChannelIds.json'
-_default = _channel_manager_folder + 'default'
+_channel_manager_folder = 'channel_manager'
+_channel_names = _channel_manager_folder + '/ChannelNames.json'
+_channel_ids = _channel_manager_folder + '/ChannelIds.json'
+_default = _channel_manager_folder + '/default'
 
 def update_channels(slack_client):
     channels = get_channels(slack_client)
