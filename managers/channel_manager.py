@@ -54,8 +54,5 @@ def get_channel_by_name(channel_name, slack_client=None):
             return str(channel_ids[channel_name])
     return io.read_file(_default)
 
-def get_channel_by_user(user, slack_client=None):
-    user_id = user_manager.get_user_by_name(user, slack_client)
-    if not user_id:
-        user_id = user
+def get_channel_by_user_id(user_id, slack_client=None):
     return get_channel_by_name(user_id, slack_client)

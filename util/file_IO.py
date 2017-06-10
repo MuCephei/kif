@@ -5,9 +5,12 @@ def write_if_nothing(file_path, msg=''):
     if not os.path.isfile(file_path):
         write_to_file(file_path, msg)
 
-def write_json_if_nothing(file_path, msg='{}'):
+def write_json_if_nothing(file_path, msg='{}', fct=None):
     if not os.path.isfile(file_path):
-        write_to_json(file_path, msg)
+        if fct:
+            write_to_json(file_path, fct())
+        else:
+            write_to_json(file_path, msg)
 
 def write_to_file(file_path, contents):
     with open(file_path, 'w') as f:

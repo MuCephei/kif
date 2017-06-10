@@ -1,10 +1,10 @@
 import time
 import subprocess
 from slackclient import SlackClient
-from managers import channel_manager, user_manager
-from util.api_calls import write_msg
+from managers import message_manager, channel_manager, user_manager
+from managers.handler_manager import HandlerManager
 from util.file_IO import read_file, write_to_file
-from handlers import sigh_handler
+from handlers import sigh_handler, id_handler
 
 revive = 'revive'
 api_token = 'APIToken'
@@ -24,28 +24,24 @@ if slack_client.rtm_connect():
 
     revive_msg = get_revive_msg()
     killers_name = revive_msg.split()[0]
-    dm_channel = channel_manager.get_channel_by_user(killers_name, slack_client)
+    killers_id = user_manager.get_user_by_name(killers_name)
 
-    write_msg(slack_client, get_revive_msg(), dm_channel)
-
-    write_revive_msg()
+    message_manager.pm_user(slack_client, get_revive_msg(), killers_id)
 
     stay_alive = True
 
-    handlers = [sigh_handler.Sigh()]
+    handler_manager = HandlerManager()
 
     while stay_alive:
         for message in slack_client.rtm_read():
 
-            for h in handlers:
-                if h.should_trigger(message):
-                    h.trigger(slack_client, message)
+            handler_manager.process_message(slack_client, message)
 
             if 'text' in message and 'kif restart' in message['text']:
                 message_text = 'restarting'
 
                 channel_manager.update_channels(slack_client)
-                write_msg(slack_client, message_text, message['channel'])
+                message_manager.send_message_as_self(slack_client, message_text, message['channel'])
 
                 name = user_manager.get_user_by_id(message['user'])
                 write_revive_msg(msg = name + ' killed me')

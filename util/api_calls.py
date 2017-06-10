@@ -4,12 +4,20 @@ _groups = 'groups.list'
 _ims = 'im.list'
 _users = 'users.list'
 
-def write_msg(slack_client, msg, channel):
+def write_msg_as_user(slack_client, msg, channel):
     slack_client.api_call(
         _post_msg,
         channel = channel,
         text = msg,
         as_user = True)
+
+def write_msg_as_other(slack_client, msg, channel, other, icon):
+    slack_client.api_call(
+        _post_msg,
+        channel = channel,
+        text = msg,
+        username = other,
+        icon_emoji = icon)
 
 def get_channels(slack_client):
     return slack_client.api_call(_channels)
