@@ -26,7 +26,7 @@ if slack_client.rtm_connect():
     killers_name = revive_msg.split()[0]
     killers_id = user_manager.get_user_by_name(killers_name)
 
-    message_manager.send_message_as_self(slack_client, get_revive_msg(), killers_id)
+    message_manager.pm_user(slack_client, get_revive_msg(), killers_id)
 
     stay_alive = True
 
