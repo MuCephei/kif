@@ -68,11 +68,7 @@ class Config(Handler):
                 else:
                     return
                 response = name + fct(name)
-            else:
-                return
-        else:
-            response = 'Insufficent permissions'
-        pm_user(slack_client, response, user_id)
+                pm_user(slack_client, response, user_id)
 
         # This is not a config editable handler
         # Which is slightly ironic, but would be a massive pain
