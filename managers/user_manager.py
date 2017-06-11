@@ -1,5 +1,6 @@
 import util.file_IO as io
 from util.api_calls import get_users
+import util.constants as k
 
 _user_manager_folder = 'user_manager'
 _user_names = _user_manager_folder + '/Usernames.json'
@@ -10,8 +11,8 @@ def update_names(slack_client):
     user_names = {}
     user_ids = {}
     for user in users['members']:
-        user_names[user['id']] = user['name']
-        user_ids[user['name']] = user['id']
+        user_names[user[k.id]] = user[k.name]
+        user_ids[user[k.name]] = user[k.id]
     io.write_to_json(_user_names, user_names)
     io.write_to_json(_user_ids, user_ids)
 

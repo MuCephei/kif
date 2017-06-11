@@ -2,6 +2,7 @@ from handler import Handler
 from util import config
 from managers.message_manager import send_message
 from managers.config_manager import get_name
+import util.constants as k
 
 class Sigh(Handler):
     default_enabled = True
@@ -15,5 +16,6 @@ class Sigh(Handler):
     def make_config(self):
         return config.make_config(self.default_enabled, [self.triggers])
 
-    def trigger(self, slack_client, message):
-        send_message(slack_client, self.response, message['channel'])
+    def process_message(self, slack_client, message):
+        if self.is_triggered(message):
+            send_message(slack_client, self.response, message[k.channel])

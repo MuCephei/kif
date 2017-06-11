@@ -13,6 +13,7 @@ class Id(Handler):
     def make_config(self):
         return config.make_config(self.default_enabled, [self.triggers])
 
-    def trigger(self, slack_client, message):
-        user_id = message['user']
-        pm_user(slack_client, user_id, user_id)
+    def process_message(self, slack_client, message):
+        if self.is_triggered(message):
+            user_id = message['user']
+            pm_user(slack_client, user_id, user_id)

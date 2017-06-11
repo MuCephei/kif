@@ -4,7 +4,7 @@ from slackclient import SlackClient
 from managers import message_manager, channel_manager, user_manager
 from managers.handler_manager import HandlerManager
 from util.file_IO import read_file, write_to_file
-from handlers import sigh_handler, id_handler
+import util.constants as k
 
 revive = 'revive'
 api_token = 'APIToken'
@@ -41,7 +41,7 @@ if slack_client.rtm_connect():
                 message_text = 'restarting'
 
                 channel_manager.update_channels(slack_client)
-                message_manager.send_message_as_self(slack_client, message_text, message['channel'])
+                message_manager.send_message_as_self(slack_client, message_text, message[k.channel])
 
                 name = user_manager.get_user_by_id(message['user'])
                 write_revive_msg(msg = name + ' killed me')

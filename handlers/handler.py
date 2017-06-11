@@ -1,5 +1,6 @@
 from managers.config_manager import get_config
 from util import config
+import util.constants as k
 
 class Handler:
     name = 'handler'
@@ -12,18 +13,15 @@ class Handler:
     def make_config(self):
         return config.make_config(self.default_enabled)
 
-    def should_trigger(self, message):
+    def is_triggered(self, message):
         if not self.conf[config.enabled]:
             return False
-        if 'text' in message and 'user' in message:
-            msg = message['text']
+        if k.text in message and k.user in message:
+            msg = message[k.text]
             for t in self.conf[Handler.trigger_tag]:
                 if t in msg:
                     return True
         return False
-
-    def trigger(self, slack_client, message):
-        pass
 
     def reload(self):
         self.__init__()

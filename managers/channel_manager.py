@@ -1,6 +1,6 @@
 import util.file_IO as io
 from util.api_calls import get_channels, get_groups, get_ims
-import user_manager
+import util.constants as k
 
 _channel_manager_folder = 'channel_manager'
 _channel_names = _channel_manager_folder + '/ChannelNames.json'
@@ -14,20 +14,20 @@ def update_channels(slack_client):
     channel_names = {}
     channel_ids = {}
 
-    if channels['ok']:
+    if channels[k.ok]:
         for channel in channels['channels']:
-            channel_names[channel['id']] = channel['name']
-            channel_ids[channel['name']] = channel['id']
+            channel_names[channel[k.id]] = channel[k.name]
+            channel_ids[channel[k.name]] = channel[k.id]
 
-    if groups['ok']:
+    if groups[k.ok]:
         for group in groups['groups']:
-            channel_names[group['id']] = group['name']
-            channel_ids[group['name']] = group['id']
+            channel_names[group[k.id]] = group[k.name]
+            channel_ids[group[k.name]] = group[k.id]
 
-    if ims['ok']:
+    if ims[k.ok]:
         for im in ims['ims']:
-            channel_names[im['id']] = im['user']
-            channel_ids[im['user']] = im['id']
+            channel_names[im[k.id]] = im[k.user]
+            channel_ids[im[k.user]] = im[k.id]
 
     io.write_to_json(_channel_names, channel_names)
     io.write_to_json(_channel_ids, channel_ids)
