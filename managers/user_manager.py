@@ -16,6 +16,10 @@ def update_names(slack_client):
     io.write_to_json(_user_names, user_names)
     io.write_to_json(_user_ids, user_ids)
 
+def is_user_id(user_id):
+    user_names = io.read_from_json(_user_names)
+    return user_id in user_names
+
 def get_user_by_id(user_id, slack_client=None):
     user_names = io.read_from_json(_user_names)
 

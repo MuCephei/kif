@@ -1,4 +1,4 @@
-from handlers import call_response_handler, config_handler, id_handler, sigh_handler
+from handlers import call_response_handler, config_handler, id_handler, sigh_handler, crash_handler
 from config_manager import update_conf
 from user_manager import get_user_by_id
 from config_manager import get_name
@@ -32,7 +32,11 @@ class HandlerManager:
                                         self._update_handler_conf,
                                         self._is_name_of_handler,
                                         self._reset_handler_conf)
-        self.handlers = [sigh_handler.Sigh(), id_handler.Id(), enabled, call_response_handler.CallResponse()]
+        self.handlers = [sigh_handler.Sigh(),
+                         id_handler.Id(),
+                         enabled,
+                         call_response_handler.CallResponse(),
+                         crash_handler.Crash()]
         self.handlers_by_name = {value.name: value for value in self.handlers}
 
     def process_message(self, slack_client, message):

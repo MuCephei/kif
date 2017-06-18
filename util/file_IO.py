@@ -1,5 +1,6 @@
 import os.path
 import json
+import constants as k
 
 def write_if_nothing(file_path, msg=''):
     if not os.path.isfile(file_path):
@@ -35,3 +36,6 @@ def read_from_json(file_path):
 
     with open(file_path) as f:
         return json.load(f)
+
+def get_API_token():
+    return read_file(k.api_token).strip()

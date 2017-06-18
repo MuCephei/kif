@@ -41,7 +41,7 @@ def get_channel_by_id(channel_id, slack_client=None):
         update_channels(slack_client)
         if channel_id in channel_names:
             return str(channel_names[channel_id])
-    return io.read_file(_default)
+    return get_default_channel()
 
 def get_channel_by_name(channel_name, slack_client=None):
     channel_ids = io.read_from_json(_channel_ids)
@@ -52,7 +52,10 @@ def get_channel_by_name(channel_name, slack_client=None):
         update_channels(slack_client)
         if channel_name in channel_ids:
             return str(channel_ids[channel_name])
-    return io.read_file(_default)
+    return get_default_channel()
 
 def get_channel_by_user_id(user_id, slack_client=None):
     return get_channel_by_name(user_id, slack_client)
+
+def get_default_channel():
+    return io.read_file(_default)
