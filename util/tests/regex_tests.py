@@ -18,10 +18,10 @@ class TwoWords(unittest.TestCase):
         self.assertFalse(two_words.match('enable f-un'))
 
     def test_get_command(self):
-        self.assertEqual(two_words.match('enable fun').group('command'), 'enable')
+        self.assertEqual(two_words.match('enable fun').group('first'), 'enable')
 
     def test_get_name(self):
-        self.assertEqual(two_words.match('enable fun').group('name'), 'fun')
+        self.assertEqual(two_words.match('enable fun').group('second'), 'fun')
 
 class CallResponse(unittest.TestCase):
     def test_match_case(self):

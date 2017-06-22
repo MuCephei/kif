@@ -5,6 +5,7 @@ import util.constants as k
 _user_manager_folder = 'user_manager'
 _user_names = _user_manager_folder + '/Usernames.json'
 _user_ids = _user_manager_folder + '/UserIds.json'
+_my_id = _user_manager_folder + '/my_id'
 
 def update_names(slack_client):
     users = get_users(slack_client)
@@ -13,6 +14,10 @@ def update_names(slack_client):
     for user in users['members']:
         user_names[user[k.id]] = user[k.name]
         user_ids[user[k.name]] = user[k.id]
+
+    my_id = slack_client.server.login_data[k.self][k.id]
+
+    io.write_to_file(_my_id, my_id)
     io.write_to_json(_user_names, user_names)
     io.write_to_json(_user_ids, user_ids)
 
@@ -50,3 +55,10 @@ def get_users_mentioned(message):
         if token in user_ids:
             mentioned_users.add(token)
     return mentioned_users
+
+def get_my_id(slack_client):
+    my_id = io.read_file(_my_id)
+    if not my_id:
+        update_names(slack_client)
+        my_id = io.read_file(_my_id)
+    return my_id

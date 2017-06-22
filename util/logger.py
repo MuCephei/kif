@@ -11,7 +11,7 @@ def write_to_log(exc_info):
     type_, value_, traceback_ = exc_info
     trace = traceback.format_tb(traceback_)
     message = str(type_) + '\n' + str(value_) + '\n' + ''.join(trace)
-    time = str(datetime.now())
+    time = str(datetime.now()).replace(' ', '_').replace('.', '_').replace(':', '_')
     write_to_file(_get_path(time), message)
 
 def get_log_list(n=0):

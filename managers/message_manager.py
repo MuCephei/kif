@@ -4,7 +4,7 @@ from channel_manager import get_channel_by_user_id
 
 def send_message_as_self(slack_client, msg, channel):
     send_message(slack_client, msg, channel,
-                 config_manager.get_name(),
+                 config_manager.get_bot_name(),
                  config_manager.get_icon())
 
 def send_message(slack_client, msg, channel, other=None, icon=':kif:'):

@@ -14,13 +14,13 @@ def _make_default_conf():
     args = [(name_tag, default_name),
             (edit_permissions, default_editors),
             (icon_tag, default_icon)]
-    return make_config(True, args = args)
+    return make_config(args = args)
 
 def get_default_conf():
-    file_IO.write_json_if_nothing(_main_conf_path, fct = _make_default_conf)
+    file_IO.write_json_if_nothing(_main_conf_path, fct=_make_default_conf)
     return file_IO.read_from_json(_main_conf_path)
 
-def get_name():
+def get_bot_name():
     conf = get_default_conf()
     if name_tag in conf:
         return conf[name_tag]
@@ -41,7 +41,7 @@ def _get_path(name):
 
 def get_config(name, default_conf='{}', fct=None):
     path = _get_path(name)
-    file_IO.write_json_if_nothing(path, msg = default_conf, fct = fct)
+    file_IO.write_json_if_nothing(path, msg=default_conf, fct=fct)
     return file_IO.read_from_json(path)
 
 def update_conf(name, new_conf):
