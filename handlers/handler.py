@@ -16,11 +16,13 @@ class Handler:
     reset_msg = 'Reset '
     opt_out_msg = 'Opted out of '
     opt_in_msg = 'Opted in to '
-    help_msg = 'This is a default help message and should not be used'
 
     def __init__(self):
         self.conf = get_config(self.name, fct = self.make_config)
         self.commands = self.get_commands()
+
+    def get_help_msg(self):
+        return 'This is a default help message and should not be used'
 
     def get_commands(self):
         #commands must take user id and slack_client as an arg
@@ -68,7 +70,7 @@ class Handler:
             pm_user(slack_client, self.insufficient_permission_msg + self.name, user_id)
 
     def help(self, user_id, slack_client):
-        pm_user(slack_client, self.help_msg, user_id)
+        pm_user(slack_client, self.get_help_msg(), user_id)
 
     def user_opt_out(self, user_id, slack_client):
         if user_id not in self.conf[self.opt_out]:

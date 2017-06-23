@@ -7,10 +7,12 @@ class Sigh(Handler):
     default_enabled = True
     name = 'sigh'
     response = '* sigh *'
-    help_msg = response
 
     def __init__(self):
         Handler.__init__(self)
+
+    def get_help_msg(self):
+        return self.response
 
     def process_message(self, slack_client, message):
         if self.should_parse_message(slack_client, message):

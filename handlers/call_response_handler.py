@@ -21,6 +21,12 @@ class CallResponse(Handler):
     def __init__(self):
         Handler.__init__(self)
 
+    def get_help_msg(self):
+        return 'To add a call type a message with the following format (Caps are important)\n' \
+               '"Call:<Your text here> Response:<Response Here>"\n' \
+               'To remove a call, use the following format\n' \
+               '"Remove:<Your text here> Response:<Response Here>"\n'
+
     def make_config(self):
         return config.make_config(Handler.get_default_config_args(self) + [(self.calls, dict())])
 

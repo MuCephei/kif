@@ -6,11 +6,13 @@ from managers.config_manager import get_bot_name
 class Id(Handler):
     default_enabled = True
     name = 'id'
-    help_msg = 'This direct messages you your user id\n' + \
-        'usage is <' + get_bot_name() + ' ' + name + '>'
 
     def __init__(self):
         Handler.__init__(self)
+
+    def get_help_msg(self):
+        return 'This direct messages you your user id\n' + \
+        'usage is <' + get_bot_name() + ' ' + self.name + '>'
 
     def process_message(self, slack_client, message):
         if self.should_parse_message(slack_client, message):
