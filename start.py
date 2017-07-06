@@ -37,4 +37,3 @@ while stay_alive:
             write_to_log(sys.exc_info())
     else:
         stay_alive = run(slack_client)
-
