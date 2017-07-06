@@ -17,6 +17,6 @@ class Id(Handler):
     def process_message(self, slack_client, message):
         if self.should_parse_message(slack_client, message):
             msg_text = message[k.text]
-            if self.is_named(msg_text):
+            if self.is_handler_named(msg_text):
                 user_id = message[k.user]
                 pm_user(slack_client, user_id, user_id)

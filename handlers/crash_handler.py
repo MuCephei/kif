@@ -16,5 +16,7 @@ class Crash(Handler):
     def process_message(self, slack_client, message):
         if self.should_parse_message(slack_client, message):
             msg_text = message[k.text]
-            if self.is_named(msg_text):
+            if self.is_handler_named(msg_text):
                 raise Exception('test')
+            elif self._is_named_call(msg_text):
+                raise Exception(msg_text)

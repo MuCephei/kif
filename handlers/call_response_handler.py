@@ -11,9 +11,9 @@ class CallResponse(Handler):
     name = 'callresponse'
     calls = 'calls'
     help_msg = 'To add a call type a message with the following format (Caps are important)\n' \
-               '"Call:<Your text here> Response:<Response Here>"\n' \
+               'Your text here>>>Response Here\n' \
                'To remove a call, use the following format\n' \
-               '"Remove:<Your text here> Response:<Response Here>"\n'
+               'Your text here<<<Response Here\n'
     added_msg = 'Response added'
     removed_msg = 'Response removed'
     no_response_msg = 'No matching response found'
@@ -22,10 +22,7 @@ class CallResponse(Handler):
         Handler.__init__(self)
 
     def get_help_msg(self):
-        return 'To add a call type a message with the following format (Caps are important)\n' \
-               '"Call:<Your text here> Response:<Response Here>"\n' \
-               'To remove a call, use the following format\n' \
-               '"Remove:<Your text here> Response:<Response Here>"\n'
+        return self.help_msg
 
     def make_config(self):
         return config.make_config(Handler.get_default_config_args(self) + [(self.calls, dict())])
@@ -59,7 +56,7 @@ class CallResponse(Handler):
 
     def process_message(self, slack_client, message):
         if self.should_parse_message(slack_client, message):
-            msg_text = message[k.text]
+            msg_text = message[k.text].strip()
             user_id = message[k.user]
 
             call_response_match = regular_expressions.call_response.match(msg_text)
@@ -70,7 +67,7 @@ class CallResponse(Handler):
 
             remove_response_match = regular_expressions.remove_response.match(msg_text)
             if remove_response_match:
-                self.remove_call_response(remove_response_match.group(k.remove),
+                self.remove_call_response(remove_response_match.group(k.call),
                                           remove_response_match.group(k.response), slack_client, user_id)
                 return
 

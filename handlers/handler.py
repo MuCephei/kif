@@ -1,7 +1,7 @@
 from managers.config_manager import get_config
 from util import config
 import util.constants as k
-from util.regular_expressions import two_words
+from util.regular_expressions import words
 from managers.config_manager import get_bot_name, update_conf, can_user_edit
 from managers.message_manager import pm_user
 
@@ -39,9 +39,28 @@ class Handler:
     def make_config(self):
         return config.make_config(self.get_default_config_args())
 
-    def is_named(self, string):
-        match = two_words.match(string)
+    @staticmethod
+    def _is_bot_named(string):
+        return get_bot_name() in string
+
+    def _is_named_call(self, string):
+        return self._is_bot_named(string) and self.name in string
+
+    def is_handler_named(self, string):
+        match = words[2].match(string)
         return match and match.group(k.first) == get_bot_name() and match.group(k.second) == self.name
+
+    def get_named_handler_command(self, string):
+        match = words[3].match(string)
+        if match and match.group(k.first) == get_bot_name() and match.group(k.second) == self.name:
+            return match.group(k.third)
+        return False
+
+    def get_named_handler_command_with_arg(self, string):
+        match = words[4].match(string)
+        if match and match.group(k.first) == get_bot_name() and match.group(k.second) == self.name:
+            return match.group(k.third), match.group(k.fourth)
+        return False, False
 
     def enable(self, user_id, slack_client):
         if can_user_edit(user_id):
@@ -85,7 +104,7 @@ class Handler:
             pm_user(slack_client, self.opt_in_msg + self.name, user_id)
 
     def get_named_command(self, msg_text):
-        regex_match = two_words.match(msg_text)
+        regex_match = words[2].match(msg_text)
         if regex_match and regex_match.group(k.second) == self.name:
             return regex_match.group(k.first)
         return False

@@ -32,7 +32,7 @@ def restart():
 
 def process_message(slack_client, message):
     if k.text in message:
-        regex_match = regular_expressions.two_words.match(message[k.text])
+        regex_match = regular_expressions.words[2].match(message[k.text])
         if regex_match and regex_match.group(k.first) == get_bot_name():
             if regex_match.group(k.second) == 'restart':
                 message_text = 'restarting'
