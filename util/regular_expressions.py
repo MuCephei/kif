@@ -16,3 +16,5 @@ def make_words_regex(n):
 words = Autovivifier(make_words_regex)
 call_response = regex.compile('\A\s*(?P<call>.*)&gt;&gt;&gt;(?P<response>.*)\Z')
 remove_response = regex.compile('\A\s*(?P<call>.*)&lt;&lt;&lt;(?P<response>.*)\Z')
+word_call_response = regex.compile('\A\s*{(?P<call>.*)}&gt;&gt;&gt;(?P<response>.*)\Z')
+word_remove_response = regex.compile('\A\s*{(?P<call>.*)}&lt;&lt;&lt;(?P<response>.*)\Z')
