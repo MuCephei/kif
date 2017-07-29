@@ -14,8 +14,7 @@ class Sigh(Handler):
     def get_help_msg(self):
         return self.response
 
-    def process_message(self, slack_client, message):
-        if self.should_parse_message(slack_client, message):
-            msg_text = message[k.text]
+    def process_message(self, slack_client, msg_text, user_id, channel):
+        if self.should_parse_message(slack_client, msg_text, user_id, channel):
             if get_bot_name() in msg_text:
-                send_message(slack_client, self.response, message[k.channel])
+                send_message(slack_client, self.response, channel)

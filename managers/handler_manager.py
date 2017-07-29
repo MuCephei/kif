@@ -1,10 +1,8 @@
-from handlers import (
-    call_response_handler, id_handler, sigh_handler, crash_handler, log_handler
-)
-from user_manager import get_my_id
+from handlers import *
 from config_manager import get_bot_name
 from message_manager import pm_user
 from util.regular_expressions import words
+from user_manager import get_my_id
 import util.constants as k
 
 class HandlerManager:
@@ -12,9 +10,11 @@ class HandlerManager:
     def __init__(self):
         self.handlers = [sigh_handler.Sigh(),
                          id_handler.Id(),
-                         call_response_handler.CallResponse(),
+                         call_response_handler.CallResponse(self),
                          crash_handler.Crash(),
-                         log_handler.Log()]
+                         log_handler.Log(),
+                         dice_handler.Dice()
+                         ]
 
     def is_help_message(self, msg_text):
         match = words[2].match(msg_text)
@@ -27,11 +27,10 @@ class HandlerManager:
             '\n'.join(map(lambda h: '*' + h.name + '*', self.handlers))
         pm_user(slack_client, msg, user_id)
 
-    def process_message(self, slack_client, message):
-        if k.user in message:
-            user = message[k.user]
-            if user != get_my_id(slack_client):
-                if k.text in message and self.is_help_message(message[k.text]):
-                    self.help(slack_client, user)
+    def process_message(self, slack_client, msg_text, user_id, channel):
+        if user_id:
+            if user_id != get_my_id(slack_client):
+                if msg_text and self.is_help_message(msg_text):
+                    self.help(slack_client, user_id)
                 for h in self.handlers:
-                    h.process_message(slack_client, message)
+                    h.process_message(slack_client, msg_text, user_id, channel)

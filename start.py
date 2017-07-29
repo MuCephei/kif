@@ -4,6 +4,7 @@ from managers import revive_manager
 from managers.handler_manager import HandlerManager
 from util.file_IO import get_API_token
 from util.logger import write_to_log
+import util.constants as k
 import sys
 
 slack_client = SlackClient(get_API_token())
@@ -20,9 +21,14 @@ def run(slack_client):
 
         while stay_alive:
             for message in slack_client.rtm_read():
-                handler_manager.process_message(slack_client, message)
 
-                stay_alive = revive_manager.process_message(slack_client, message)
+                msg_text = '' if k.text not in message else message[k.text]
+                user_id = '' if k.user not in message else message[k.user]
+                channel = '' if k.channel not in message else message[k.channel]
+
+                handler_manager.process_message(slack_client, msg_text, user_id, channel)
+
+                stay_alive = revive_manager.process_message(slack_client, msg_text, user_id, channel)
 
             time.sleep(0.1)
     return stay_alive

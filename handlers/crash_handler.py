@@ -13,9 +13,8 @@ class Crash(Handler):
         return 'This raises an exception to test error handling and logging\n' + \
         'usage is <' + get_bot_name() + ' ' + self.name + '>'
 
-    def process_message(self, slack_client, message):
-        if self.should_parse_message(slack_client, message):
-            msg_text = message[k.text]
+    def process_message(self, slack_client, msg_text, user_id, channel):
+        if self.should_parse_message(slack_client, msg_text, user_id, channel):
             if self.is_handler_named(msg_text):
                 raise Exception('test')
             elif self._is_named_call(msg_text):

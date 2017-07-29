@@ -109,13 +109,10 @@ class Handler:
             return regex_match.group(k.first)
         return False
 
-    def should_parse_message(self, slack_client, message):
+    def should_parse_message(self, slack_client, msg_text, user_id, channel):
         # The check to see if kif sent it happens higher up
-        if k.text not in message or k.user not in message or k.channel not in message:
+        if not msg_text or not user_id or not channel:
             return False
-
-        msg_text = message[k.text]
-        user_id = message[k.user]
 
         command = self.get_named_command(msg_text)
         if command and command in self.commands:
@@ -125,4 +122,4 @@ class Handler:
         if not self.conf[self.enabled]:
             return False
 
-        return message[k.user] not in self.conf[self.opt_out]
+        return user_id not in self.conf[self.opt_out]

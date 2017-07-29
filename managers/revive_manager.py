@@ -30,17 +30,17 @@ def restart():
     elif os.name == 'posix':
         subprocess.call('./util/restart_scripts/restart.sh')
 
-def process_message(slack_client, message):
-    if k.text in message:
-        regex_match = regular_expressions.words[2].match(message[k.text])
+def process_message(slack_client, msg_text, user_id, channel):
+    if msg_text:
+        regex_match = regular_expressions.words[2].match(msg_text)
         if regex_match and regex_match.group(k.first) == get_bot_name():
             if regex_match.group(k.second) == 'restart':
                 message_text = 'restarting'
 
                 channel_manager.update_channels(slack_client)
-                message_manager.send_message_as_self(slack_client, message_text, message[k.channel])
+                message_manager.send_message_as_self(slack_client, message_text, channel)
 
-                write_killer(message[k.user])
+                write_killer(user_id)
 
                 restart()
                 return False
@@ -48,9 +48,9 @@ def process_message(slack_client, message):
                 message_text = 'dieing'
 
                 channel_manager.update_channels(slack_client)
-                message_manager.send_message_as_self(slack_client, message_text, message[k.channel])
+                message_manager.send_message_as_self(slack_client, message_text, channel)
 
-                write_killer(message[k.user])
+                write_killer(user_id)
 
                 return False
     return True

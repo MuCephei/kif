@@ -1,7 +1,6 @@
 from handler import Handler
 from managers.config_manager import get_bot_name
 from managers.message_manager import pm_user
-from util.file_IO import read_file
 import util.constants as k
 from util import logger
 
@@ -46,19 +45,18 @@ class Log(Handler):
         return 'This allows users to view and interact with error logs\n' + \
                'usage is <' + get_bot_name() + ' ' + self.name + '>'
 
-    def process_message(self, slack_client, message):
-        if self.should_parse_message(slack_client, message):
-            msg_text = message[k.text]
+    def process_message(self, slack_client, msg_text, user_id, channel):
+        if self.should_parse_message(slack_client, msg_text, user_id, channel):
             if self.is_handler_named(msg_text):
-                self.item_command(slack_client, message[k.user])
+                self.item_command(slack_client, user_id)
             else:
                 command = self.get_named_handler_command(msg_text)
                 if command:
                     if command in self.handler_commands:
-                        self.handler_commands[command](slack_client, message[k.user])
+                        self.handler_commands[command](slack_client, user_id)
                     else:
-                        self.item_command(slack_client, message[k.user], command)
+                        self.item_command(slack_client, user_id, command)
                 else:
                     command, arg = self.get_named_handler_command_with_arg(msg_text)
                     if command and command in self.handler_commands:
-                        self.handler_commands[command](slack_client, message[k.user], arg)
+                        self.handler_commands[command](slack_client, user_id, arg)

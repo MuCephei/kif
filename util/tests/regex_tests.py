@@ -105,5 +105,39 @@ class RemoveResponse(unittest.TestCase):
         self.assertEqual(remove_response.match('a&lt;&lt;&lt;b ').group('response'),
                          'b ')
 
+class Dice(unittest.TestCase):
+    def test_easy(self):
+        self.assertTrue(dice.match('1d6'))
+        self.assertTrue(dice.match(' 1d6 '))
+        self.assertTrue(dice.match(' 1d6 + 7'))
+        self.assertTrue(dice.match('1d6+7'))
+
+    def test_non_match_case(self):
+        self.assertFalse(dice.match('-1d6'))
+        self.assertFalse(dice.match('16'))
+        self.assertFalse(dice.match('d6 + 7'))
+        self.assertFalse(dice.match('1d6++7'))
+
+    def n(self):
+        self.assertEqual(dice.match('1d6+7').group('n'), '1')
+        self.assertEqual(dice.match('10d6+7').group('n'), '10')
+        self.assertEqual(dice.match('01d6+7').group('n'), '01')
+        self.assertEqual(dice.match('7d6').group('n'), '7')
+
+    def m(self):
+        self.assertEqual(dice.match('1d6+7').group('m'), '6')
+        self.assertEqual(dice.match('10d060+7').group('m'), '060')
+
+    def sign(self):
+        self.assertEqual(dice.match('1d6+7').group('sign'), '+')
+        self.assertEqual(dice.match('10d060-7').group('sign'), '-')
+        self.assertEqual(dice.match('10d060+-7').group('sign'), '+-')
+
+    def q(self):
+        self.assertEqual(dice.match('1d6+7').group('q'), '7')
+        self.assertEqual(dice.match('10d060-7').group('q'), '7')
+        self.assertEqual(dice.match('10d060+-7').group('q'), '7')
+
+
 if __name__ == '__main__':
     unittest.main()
