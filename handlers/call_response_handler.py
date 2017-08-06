@@ -89,7 +89,7 @@ class CallResponse(Handler):
     def remove_alias(self, call, slack_client, user_id):
         if self.alias_calls not in self.conf:
             self.conf[self.alias_calls] = {}
-        self.conf[self.alias_calls][call] = ''
+        del self.conf[self.alias_calls][call + user_id]
         update_conf(self.name, self.conf)
         pm_user(slack_client, self.removed_alias, user_id)
 
