@@ -48,8 +48,10 @@ class CallResponse(Handler):
         if self.alias_calls in self.conf:
             for key, value in self.conf[self.alias_calls].iteritems():
                 if key in msg_text + user_id:
+                    text = value[0]
+                    args += value[1]
                     self.master_handler.process_message(slack_client,
-                        input_text=value, user_id=user_id, channel=channel, timestamp=timestamp, args=args)
+                        input_text=text, user_id=user_id, channel=channel, timestamp=timestamp, args=args)
 
         return response
 
@@ -66,10 +68,10 @@ class CallResponse(Handler):
         update_conf(self.name, self.conf)
         pm_user(slack_client, self.added_msg, user_id)
 
-    def add_alias(self, call, response, slack_client, user_id):
+    def add_alias(self, call, response, slack_client, user_id, args):
         if self.alias_calls not in self.conf:
             self.conf[self.alias_calls] = {}
-        self.conf[self.alias_calls][call + user_id] = response
+        self.conf[self.alias_calls][call + user_id] = [response, args]
         update_conf(self.name, self.conf)
         pm_user(slack_client, self.added_alias, user_id)
 
@@ -124,10 +126,10 @@ class CallResponse(Handler):
                                       match.group(k.response), slack_client, user_id, type=self.words_calls)
             return
 
-    def alias_call_response(self, slack_client, user_id, msg_text):
+    def alias_call_response(self, slack_client, user_id, msg_text, args):
         match = regular_expressions.alias_call_response.match(msg_text)
         if match:
-            self.add_alias(match.group(k.call), match.group(k.response), slack_client, user_id)
+            self.add_alias(match.group(k.call), match.group(k.response), slack_client, user_id, args)
             return True
         return
 
@@ -146,7 +148,7 @@ class CallResponse(Handler):
                 return
             elif self.word_call_response(slack_client, user_id, msg_text):
                 return
-            elif self.alias_call_response(slack_client, user_id, msg_text):
+            elif self.alias_call_response(slack_client, user_id, msg_text, args):
                 return
             elif self.alias_remove_response(slack_client, user_id, msg_text):
                 return
