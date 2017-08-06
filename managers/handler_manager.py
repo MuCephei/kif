@@ -31,7 +31,10 @@ class HandlerManager:
     def should_stay_alive(self):
             return self.alive
 
-    def process_message(self, slack_client, message=None, input_text='', user_id='', channel='', timestamp='', args=[]):
+    def process_message(self, slack_client, message=None, input_text='', user_id='', channel='', timestamp='', args=None):
+
+        if not args:
+            args = []
 
         if message:
             input_text = '' if k.text not in message else message[k.text]
