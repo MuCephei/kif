@@ -32,7 +32,7 @@ class CallResponse(Handler):
     def make_config(self):
         return config.make_config(Handler.get_default_config_args(self))
 
-    def get_response(self, slack_client, msg_text, user_id, channel):
+    def get_response(self, slack_client, msg_text, user_id, channel, timestamp, args):
         response = ''
         if self.calls in self.conf:
             for key, values in self.conf[self.calls].iteritems():
@@ -48,7 +48,8 @@ class CallResponse(Handler):
         if self.alias_calls in self.conf:
             for key, value in self.conf[self.alias_calls].iteritems():
                 if key in msg_text + user_id:
-                    self.master_handler.process_message(slack_client, value, user_id, channel)
+                    self.master_handler.process_message(slack_client,
+                        input_text=value, user_id=user_id, channel=channel, timestamp=timestamp, args=args)
 
         return response
 
@@ -137,7 +138,7 @@ class CallResponse(Handler):
             return True
         return False
 
-    def process_message(self, slack_client, msg_text, user_id, channel):
+    def process_message(self, slack_client, msg_text, user_id, channel, timestamp, args):
         if self.should_parse_message(slack_client, msg_text, user_id, channel):
             msg_text = msg_text.strip()
 
@@ -155,6 +156,6 @@ class CallResponse(Handler):
                 return
 
 
-            response = self.get_response(slack_client, msg_text, user_id, channel)
+            response = self.get_response(slack_client, msg_text, user_id, channel, timestamp, args)
             if response:
                 send_message(slack_client, response, channel)

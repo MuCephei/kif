@@ -45,7 +45,7 @@ class Log(Handler):
         return 'This allows users to view and interact with error logs\n' + \
                'usage is <' + get_bot_name() + ' ' + self.name + '>'
 
-    def process_message(self, slack_client, msg_text, user_id, channel):
+    def process_message(self, slack_client, msg_text, user_id, channel, timestamp, args):
         if self.should_parse_message(slack_client, msg_text, user_id, channel):
             if self.is_handler_named(msg_text):
                 self.item_command(slack_client, user_id)

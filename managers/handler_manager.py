@@ -8,6 +8,7 @@ import util.constants as k
 class HandlerManager:
 
     def __init__(self):
+        self.alive = True
         self.handlers = [sigh_handler.Sigh(),
                          id_handler.Id(),
                          call_response_handler.CallResponse(self),
@@ -27,10 +28,26 @@ class HandlerManager:
             '\n'.join(map(lambda h: '*' + h.name + '*', self.handlers))
         pm_user(slack_client, msg, user_id)
 
-    def process_message(self, slack_client, msg_text, user_id, channel):
+    def should_stay_alive(self):
+            return self.alive
+
+    def process_message(self, slack_client, message=None, input_text='', user_id='', channel='', timestamp='', args=[]):
+
+        if message:
+            input_text = '' if k.text not in message else message[k.text]
+            user_id = '' if k.user not in message else message[k.user]
+            channel = '' if k.channel not in message else message[k.channel]
+            timestamp = '' if k.timestamp not in message else message[k.timestamp]
+
+        sections = input_text.split(' --')
+        msg_text = sections[0]
+        args += sections[1:]
+
         if user_id:
             if user_id != get_my_id(slack_client):
                 if msg_text and self.is_help_message(msg_text):
                     self.help(slack_client, user_id)
                 for h in self.handlers:
-                    h.process_message(slack_client, msg_text, user_id, channel)
+                    h.process_message(slack_client, msg_text, user_id, channel, timestamp, args)
+
+                self.alive = revive_handler.process_message(slack_client, msg_text, user_id, channel, timestamp, args)

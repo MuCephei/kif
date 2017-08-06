@@ -13,7 +13,7 @@ class Id(Handler):
         return 'This direct messages you your user id\n' + \
         'usage is <' + get_bot_name() + ' ' + self.name + '>'
 
-    def process_message(self, slack_client, msg_text, user_id, channel):
+    def process_message(self, slack_client, msg_text, user_id, channel, timestamp, args):
         if self.should_parse_message(slack_client, msg_text, user_id, channel):
             if self.is_handler_named(msg_text):
                 pm_user(slack_client, user_id, user_id)

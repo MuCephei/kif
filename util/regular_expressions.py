@@ -23,6 +23,7 @@ word_remove_response = regex.compile('\A\s*{(?P<' +k.call + '>.*)}&lt;&lt;&lt;(?
 alias_call_response = regex.compile('\A\s*\[(?P<' +k.call + '>.*)\]&gt;&gt;&gt;(?P<' +k.response + '>.*)\Z')
 alias_remove_response = regex.compile('\A\s*\[(?P<' + k.call + '>.*)\]&lt;&lt;&lt;(?P<' + k.response + '>.*)\Z')
 
+
 dice = regex.compile('\A\s*(?P<' + k.number_dice + '>[0-9]+)d(?P<' + k.dice_type +
                      '>[0-9]+)\s*((?P<' + k.dice_sign + '>[\+-])\s*(?P<' + k.dice_modifier + '>[0-9]+))?\s*\Z')
 

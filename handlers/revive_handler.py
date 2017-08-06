@@ -1,10 +1,10 @@
 from util.file_IO import read_file, write_to_file
-import user_manager
-import message_manager
+import managers.user_manager
+import managers.message_manager
 import util.constants as k
 from util import regular_expressions
-from config_manager import get_bot_name
-import channel_manager
+from managers.config_manager import get_bot_name
+import managers.channel_manager
 import subprocess
 import os
 
@@ -19,10 +19,10 @@ def get_killer_id():
 
 def revive(slack_client):
     killers_id = get_killer_id()
-    if killers_id and user_manager.is_user_id(killers_id):
-        message_manager.pm_user(slack_client, revive_msg, killers_id)
+    if killers_id and managers.user_manager.is_user_id(killers_id):
+        managers.message_manager.pm_user(slack_client, revive_msg, killers_id)
     else:
-        message_manager.send_message(slack_client, revive_msg, channel_manager.get_default_channel())
+        managers.message_manager.send_message(slack_client, revive_msg, managers.channel_manager.get_default_channel())
 
 def restart():
     if os.name == k.windows:
@@ -30,15 +30,15 @@ def restart():
     elif os.name == 'posix':
         subprocess.call('./util/restart_scripts/restart.sh')
 
-def process_message(slack_client, msg_text, user_id, channel):
+def process_message(slack_client, msg_text, user_id, channel, timestamp, args):
     if msg_text:
         regex_match = regular_expressions.words[2].match(msg_text)
         if regex_match and regex_match.group(k.first) == get_bot_name():
             if regex_match.group(k.second) == 'restart':
                 message_text = 'restarting'
 
-                channel_manager.update_channels(slack_client)
-                message_manager.send_message_as_self(slack_client, message_text, channel)
+                managers.channel_manager.update_channels(slack_client)
+                managers.message_manager.send_message_as_self(slack_client, message_text, channel)
 
                 write_killer(user_id)
 
@@ -47,8 +47,8 @@ def process_message(slack_client, msg_text, user_id, channel):
             elif regex_match.group(k.second) == 'die':
                 message_text = 'dieing'
 
-                channel_manager.update_channels(slack_client)
-                message_manager.send_message_as_self(slack_client, message_text, channel)
+                managers.channel_manager.update_channels(slack_client)
+                managers.message_manager.send_message_as_self(slack_client, message_text, channel)
 
                 write_killer(user_id)
 

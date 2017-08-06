@@ -17,12 +17,12 @@ class Dice(Handler):
     def get_help_msg(self):
         return self.help_msg
 
-    def process_message(self, slack_client, msg_text, user_id, channel):
+    def process_message(self, slack_client, msg_text, user_id, channel, timestamp, args):
         if self.should_parse_message(slack_client, msg_text, user_id, channel):
             match = dice.match(msg_text)
             if match:
                 number = int(match.group(k.number_dice))
-                dice_type = int(match.group(k.dice_type))
+                dice_type = int(match.group(k.dice_type)) + 1
                 sign = match.group(k.dice_sign)
                 modifier = match.group(k.dice_modifier)
                 if sign and len(sign) > 1:
@@ -32,6 +32,14 @@ class Dice(Handler):
                     modifier = (-1 if sign == '-' else 1) * int(modifier)
                 else:
                     modifier = 0
-                roll = dice_roller.roll(number, dice_type, modifier)
-                send_message(slack_client, str(roll), channel)
+                show = 'show' in args or 's' in args
+                if 'advantage' in args or 'a' in args:
+                    roll = dice_roller.roll_advantage(number, dice_type, modifier, show)[0]
+                    roll += ' (advantage)'
+                elif 'disadvantage' in args or 'd' in args:
+                    roll = dice_roller.roll_disadvantage(number, dice_type, modifier, show)[0]
+                    roll += ' (disadvantage)'
+                else:
+                    roll = dice_roller.roll(number, dice_type, modifier, show)[0]
+                send_message(slack_client, roll, channel)
 
