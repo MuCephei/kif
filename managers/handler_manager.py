@@ -1,7 +1,7 @@
 from handlers import *
 from config_manager import get_bot_name
 from message_manager import pm_user
-from util.regular_expressions import words
+from util.regular_expressions import words, args_regex
 from user_manager import get_my_id
 import util.constants as k
 
@@ -34,7 +34,7 @@ class HandlerManager:
     def process_message(self, slack_client, message=None, input_text='', user_id='', channel='', timestamp='', args=None):
 
         if not args:
-            args = []
+            args = {}
 
         if message:
             input_text = '' if k.text not in message else message[k.text]
@@ -42,9 +42,10 @@ class HandlerManager:
             channel = '' if k.channel not in message else message[k.channel]
             timestamp = '' if k.timestamp not in message else message[k.timestamp]
 
-        sections = input_text.split(' --')
+        sections = input_text.split('--')
         msg_text = sections[0]
-        args += sections[1:]
+        for match in args_regex.finditer(input_text):
+            args[match.group(k.arg)] = match.group(k.value)
 
         if user_id:
             if user_id != get_my_id(slack_client):

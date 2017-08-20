@@ -19,8 +19,7 @@ class Dice(Handler):
 
     def process_message(self, slack_client, msg_text, user_id, channel, timestamp, args):
         if self.should_parse_message(slack_client, msg_text, user_id, channel):
-            match = dice.match(msg_text)
-            if match:
+            for match in dice.finditer(msg_text):
                 number = int(match.group(k.number_dice))
                 dice_type = int(match.group(k.dice_type)) + 1
                 sign = match.group(k.dice_sign)

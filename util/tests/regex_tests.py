@@ -113,31 +113,50 @@ class Dice(unittest.TestCase):
         self.assertTrue(dice.match('1d6+7'))
 
     def test_non_match_case(self):
-        self.assertFalse(dice.match('-1d6'))
         self.assertFalse(dice.match('16'))
         self.assertFalse(dice.match('d6 + 7'))
-        self.assertFalse(dice.match('1d6++7'))
 
-    def n(self):
+    def test_n(self):
         self.assertEqual(dice.match('1d6+7').group('n'), '1')
         self.assertEqual(dice.match('10d6+7').group('n'), '10')
         self.assertEqual(dice.match('01d6+7').group('n'), '01')
         self.assertEqual(dice.match('7d6').group('n'), '7')
 
-    def m(self):
+    def test_m(self):
         self.assertEqual(dice.match('1d6+7').group('m'), '6')
         self.assertEqual(dice.match('10d060+7').group('m'), '060')
 
-    def sign(self):
+    def test_sign(self):
         self.assertEqual(dice.match('1d6+7').group('sign'), '+')
         self.assertEqual(dice.match('10d060-7').group('sign'), '-')
-        self.assertEqual(dice.match('10d060+-7').group('sign'), '+-')
 
-    def q(self):
+    def test_q(self):
         self.assertEqual(dice.match('1d6+7').group('q'), '7')
         self.assertEqual(dice.match('10d060-7').group('q'), '7')
-        self.assertEqual(dice.match('10d060+-7').group('q'), '7')
 
+    def test_multiple(self):
+        self.assertEqual(dice.findall('1d6 + 4 2d3'), [('1', '6', '+ 4', '+', '4'), ('2', '3', '', '', '')])
+        self.assertEqual(dice.findall('1d6 + 4 + 2d3 - 7'), [('1', '6', '+ 4', '+', '4'), ('2', '3', '- 7', '-', '7')])
+
+
+class Arg(unittest.TestCase):
+    def test_no_agrs(self):
+        self.assertFalse(args_regex.search('kif'))
+        self.assertFalse(args_regex.search('Wow what a nice day outside.'))
+
+    def test_arg(self):
+        self.assertEqual(args_regex.search('dice --show').group('arg'), 'show')
+
+    def test_named_args(self):
+        self.assertEqual(args_regex.findall('dice --show'), [('show', '', '')])
+        self.assertEqual(args_regex.findall('dice --show --a'), [('show', '', ''), ('a', '', '')])
+
+    def test_valued_args(self):
+        self.assertEqual(args_regex.findall('dice --show true'), [('show', ' true', 'true')])
+        self.assertEqual(args_regex.findall('dice --show yes --a no'), [('show', ' yes ', 'yes'), ('a', ' no', 'no')])
+
+    def test_value(self):
+        self.assertEqual(args_regex.search('dice --show true').group('value'), 'true')
 
 if __name__ == '__main__':
     unittest.main()

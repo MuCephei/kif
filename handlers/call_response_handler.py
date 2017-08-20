@@ -49,7 +49,7 @@ class CallResponse(Handler):
             for key, value in self.conf[self.alias_calls].iteritems():
                 if key in msg_text + user_id:
                     text = value[0]
-                    args += value[1]
+                    args.update(value[1])
                     self.master_handler.process_message(slack_client,
                         input_text=text, user_id=user_id, channel=channel, timestamp=timestamp, args=args)
 
