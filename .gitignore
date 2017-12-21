@@ -7,3 +7,8 @@ APIToken
 .idea/workspace.xml
 .idea/
 killer_id
+channel_manager/*
+DND
+conf/*
+log/*
+user_manager/*

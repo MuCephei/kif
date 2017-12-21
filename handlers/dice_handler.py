@@ -8,6 +8,7 @@ class Dice(Handler):
     default_enabled = True
     name = 'dice'
     invalid_modifier = 'Invalid command'
+    cannot_be_best_and_worst = 'Cannot roll with both the best and the worst'
     help_msg = 'To roll dice enter in the "ndm +/- q" format\n' + \
         'Where n is the number of dice, m is the number of sides and q is a modifier'
 
@@ -31,14 +32,17 @@ class Dice(Handler):
                     modifier = (-1 if sign == '-' else 1) * int(modifier)
                 else:
                     modifier = 0
-                show = 'show' in args or 's' in args
-                if 'advantage' in args or 'a' in args:
-                    roll = dice_roller.roll_advantage(number, dice_type, modifier, show)[0]
-                    roll += ' (advantage)'
-                elif 'disadvantage' in args or 'd' in args:
-                    roll = dice_roller.roll_disadvantage(number, dice_type, modifier, show)[0]
-                    roll += ' (disadvantage)'
+                show = k.show in args or k.short_ in args
+                best = int(args[k.best]) if k.best in args and args[k.best] else 0
+                worst = int(args[k.worst]) if k.worst in args and args[k.worst] else 0
+                if best and worst:
+                    send_message(slack_client, self.cannot_be_best_and_worst, channel)
                 else:
-                    roll = dice_roller.roll(number, dice_type, modifier, show)[0]
-                send_message(slack_client, roll, channel)
+                    if k.advantage in args or k.advantage_ in args:
+                        roll = dice_roller.roll_advantage(number, dice_type, modifier, show, best, worst)
+                    elif k.disadvantage in args or k.disadvantage_ in args:
+                        roll = dice_roller.roll_disadvantage(number, dice_type, modifier, show, best, worst)
+                    else:
+                        roll = dice_roller.roll(number, dice_type, modifier, show, best, worst)
+                    send_message(slack_client, roll, channel)
 
