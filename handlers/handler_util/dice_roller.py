@@ -1,15 +1,16 @@
 import numpy as np
 
-def roll(number, dice, modifier, show, best, worst):
-    return _roll(number, dice, modifier, show, best, worst)[0]
+def roll(number, dice, modifier, show, best, worst, great):
+    return _roll(number, dice, modifier, show, best, worst, great)[0]
 
-def _roll(number, dice, modifier, show, best, worst):
+def _roll(number, dice, modifier, show, best, worst, great):
     #returns the string and the value
     base = 1
     if dice == 1:
         base = 0
 
     rolls = np.random.randint(base, dice, number)
+    rolls = map(lambda r: r if r > great else np.random.randint(base, dice), rolls)
     result = sum(rolls) + modifier
     bold_numbers = set()
     if best:
@@ -28,13 +29,13 @@ def _roll(number, dice, modifier, show, best, worst):
         return str(result), result
 
 
-def roll_advantage(number, dice, modifier, show, best, worst):
-    adv = max(_roll(number, dice, modifier, show, best, worst),
-              _roll(number, dice, modifier, show, best, worst), key=lambda r: r[1])
+def roll_advantage(number, dice, modifier, show, best, worst, great):
+    adv = max(_roll(number, dice, modifier, show, best, worst, great),
+              _roll(number, dice, modifier, show, best, worst, great), key=lambda r: r[1])
     return adv[0] + ' (advantage)'
 
 
-def roll_disadvantage(number, dice, modifier, show, best, worst):
-    dis = min(_roll(number, dice, modifier, show, best, worst),
-              _roll(number, dice, modifier, show, best, worst), key=lambda r: r[1])
+def roll_disadvantage(number, dice, modifier, show, best, worst, great):
+    dis = min(_roll(number, dice, modifier, show, best, worst, great),
+              _roll(number, dice, modifier, show, best, worst, great), key=lambda r: r[1])
     return dis[0] + ' (disadvantage)'

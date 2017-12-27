@@ -35,14 +35,15 @@ class Dice(Handler):
                 show = k.show in args or k.short_ in args
                 best = int(args[k.best]) if k.best in args and args[k.best] else 0
                 worst = int(args[k.worst]) if k.worst in args and args[k.worst] else 0
+                great = int(args[k.great]) if k.great in args and args[k.great] else 0
                 if best and worst:
                     send_message(slack_client, self.cannot_be_best_and_worst, channel)
                 else:
                     if k.advantage in args or k.advantage_ in args:
-                        roll = dice_roller.roll_advantage(number, dice_type, modifier, show, best, worst)
+                        roll = dice_roller.roll_advantage(number, dice_type, modifier, show, best, worst, great)
                     elif k.disadvantage in args or k.disadvantage_ in args:
-                        roll = dice_roller.roll_disadvantage(number, dice_type, modifier, show, best, worst)
+                        roll = dice_roller.roll_disadvantage(number, dice_type, modifier, show, best, worst, great)
                     else:
-                        roll = dice_roller.roll(number, dice_type, modifier, show, best, worst)
+                        roll = dice_roller.roll(number, dice_type, modifier, show, best, worst, great)
                     send_message(slack_client, roll, channel)
 
