@@ -1,8 +1,8 @@
 from handlers import *
-from config_manager import get_bot_name
-from message_manager import pm_user
+from managers.config_manager import get_bot_name
+from managers.message_manager import pm_user
 from util.regular_expressions import words, args_regex
-from user_manager import get_my_id
+from managers.user_manager import get_my_id
 import util.constants as k
 
 class HandlerManager:
@@ -14,7 +14,8 @@ class HandlerManager:
                          call_response_handler.CallResponse(self),
                          crash_handler.Crash(),
                          log_handler.Log(),
-                         dice_handler.Dice()
+                         dice_handler.Dice(),
+                         text_handler.Text(),
                          ]
 
     def is_help_message(self, msg_text):

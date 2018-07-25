@@ -1,6 +1,6 @@
 import util.api_calls as api
-import config_manager
-from channel_manager import get_channel_by_user_id
+from . import config_manager
+from .channel_manager import get_channel_by_user_id
 
 def send_message_as_self(slack_client, msg, channel):
     send_message(slack_client, msg, channel,

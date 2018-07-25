@@ -1,6 +1,6 @@
 import regex
 from util.autovivifier import Autovivifier
-import constants as k
+import util.constants as k
 
 # I don't want crazy regular expressions mucking up the normal code
 # Also makes it easier to test
@@ -22,6 +22,7 @@ word_call_response = regex.compile('\A\s*{(?P<' +k.call + '>.*)}&gt;&gt;&gt;(?P<
 word_remove_response = regex.compile('\A\s*{(?P<' +k.call + '>.*)}&lt;&lt;&lt;(?P<' +k.response + '>.*)\Z')
 alias_call_response = regex.compile('\A\s*\[(?P<' +k.call + '>.*)\]&gt;&gt;&gt;(?P<' +k.response + '>.*)\Z')
 alias_remove_response = regex.compile('\A\s*\[(?P<' + k.call + '>.*)\]&lt;&lt;&lt;(?P<' + k.response + '>.*)\Z')
+user_mention = regex.compile('<@[0-9A-Z]*>')
 
 
 dice = regex.compile('\s*(?P<' + k.number_dice + '>[0-9]+)d(?P<' + k.dice_type +

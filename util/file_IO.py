@@ -1,12 +1,12 @@
 import os.path
 import json
-import constants as k
+from . import constants as k
 
 def write_if_nothing(file_path, msg=''):
     if not os.path.isfile(file_path):
         write_to_file(file_path, msg)
 
-def write_json_if_nothing(file_path, msg='{}', fct=None):
+def write_json_if_nothing(file_path, msg={}, fct=None):
     if not os.path.isfile(file_path):
         if fct:
             write_to_json(file_path, fct())

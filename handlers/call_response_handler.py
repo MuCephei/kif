@@ -1,4 +1,4 @@
-from handler import Handler
+from handlers.handler import Handler
 from util import config
 from managers.message_manager import send_message, pm_user
 from managers.config_manager import update_conf

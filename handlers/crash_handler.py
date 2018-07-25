@@ -1,4 +1,4 @@
-from handler import Handler
+from handlers.handler import Handler
 from managers.config_manager import get_bot_name
 import util.constants as k
 

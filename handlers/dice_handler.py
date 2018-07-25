@@ -1,7 +1,7 @@
-from handler import Handler
+from handlers.handler import Handler
 from managers.message_manager import send_message
 from util.regular_expressions import dice
-from handler_util import dice_roller
+from handlers.handler_util import dice_roller
 import util.constants as k
 
 class Dice(Handler):

@@ -1,4 +1,4 @@
-from directory import mkdir
-import constants as k
+from .directory import mkdir
+from . import constants as k
 
 mkdir(k.log)
