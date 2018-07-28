@@ -24,7 +24,7 @@ class Text(Handler):
         elif 'register' in msg_text:
             try:
                 to_num, from_num, acc, auth = msg_text.split('register')[1].strip(' ').split(' ')
-            except KeyError:
+            except IndexError:
                 send_message_as_self(slack_client,
                                      "-sigh- At least try to get the formatting right, Zapp...",
                                      channel)
@@ -49,10 +49,10 @@ class Text(Handler):
 
             mentioned = [m.strip('<@').strip('>') for m in re.findall(user_mention.pattern, msg_text)]
             for mention in mentioned:
-                msg_text = msg_text.replace('<@{mention}>', mention)
+                msg_text = msg_text.replace('<@'+str(mention)+'>', mention)
             users = {mention: get_user_by_id(mention) for mention in mentioned}
             for mention, name in users.items():
-                msg_text = msg_text.replace(mention, '@{name}')
+                msg_text = msg_text.replace(mention, '@'+str(name))
             for user in mentioned:
                 try:
                     user_info = get_user_contact(user)
