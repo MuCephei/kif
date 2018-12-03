@@ -14,6 +14,12 @@ def write_to_log(exc_info):
     time = str(datetime.now()).replace(' ', '_').replace('.', '_').replace(':', '_').replace('-', '_')
     write_to_file(_get_path(time), message)
 
+def prune_logs(n=20):
+    logs = get_log_list()
+    if logs and len(logs) > n:
+        for log in logs[n:]:
+            os.remove(_get_path(log))
+
 def get_log_list(n=0):
     logs = os.listdir(k.log)
     if not logs:
@@ -22,13 +28,6 @@ def get_log_list(n=0):
         return sorted(logs, reverse=True)[:n]
     else:
         return sorted(logs, reverse=True)
-
-def delete_logs():
-    logs = get_log_list()
-    if logs:
-        for log in logs:
-            os.remove(log)
-        return len(logs)
 
 def get_log(n):
     logs = get_log_list(n + 1)
